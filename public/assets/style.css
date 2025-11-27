@@ -4,7 +4,7 @@
 }
 body{
 	padding: 0;
-	padding-top: 27px;
+	padding-top: 47px;
 	margin: 0;
 	background-color: #212121;
 }
@@ -42,16 +42,24 @@ a{
 	top: 0;
 	left: 0;
 	right: 0;
+	height: 50px;
 }
 .navbar .tm a{
 	text-decoration: none;
 	display: inline-block;
 	color: white;
 	transform: translateY(-2px);
+	font-size: 20px;
+}
+.navbar .tm a:hover{
+	color: royalblue;
 }
 .navbar .menu a{
+	line-height: 35px;
+	box-sizing: border-box;
 	display: inline-block;
 	padding: 7px;
+	height: 50px;
 	background-color: inherit;
 	text-decoration: none;
 	color: cyan;
@@ -75,7 +83,6 @@ a{
 	border-radius: 45px 0 0 45px;
 	outline: none;
 	border: none;
-	width: 300px;
 	margin: 0;
 }
 #form #btn{
@@ -101,7 +108,6 @@ a{
 	margin-right: auto;
 	background-color: #151515;
 	height: 70vh;
-	width: 80vh;
 	border-radius: 12px;
 	padding-bottom: 20px;
 	overflow: auto;

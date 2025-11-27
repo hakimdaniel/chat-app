@@ -36,7 +36,6 @@ wss.on('connection', (socket,request) => {
           client.send(message.split("<>")[1]);
         }
         else if(client === socket){
-          console.log(socket.clientKey)
           client.send(`<span class="animate"><b>You</b> : ${message}</span>`);
         } else {
           if (online.includes(clientIP)) {
@@ -76,6 +75,6 @@ app.use((req, res) => {
 });
 
 // START SINGLE SERVER
-server.listen(port, () => {
+server.listen(port,() => {
   console.log(`HTTP + WebSocket running at http://localhost:${port}`);
 });
