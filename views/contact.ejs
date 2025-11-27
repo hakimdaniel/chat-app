@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>HakimCodez | Contact</title>
+<%- include('partials/font') %>
+	<link rel="stylesheet" type="text/css" href="assets/style.css">
+	<style>
+		p,h1{
+			padding: 0;
+			margin: 0;
+		}
+		h1 + p{
+			line-height: 25px;
+			text-align: justify;
+		}
+		h1{
+			margin-top: 30px;
+			margin-bottom: 12px;
+		}
+		.container{
+			max-width: 500px;
+			padding: 0 60px;
+			padding-top: 60px;
+		}
+		.container2{
+			max-width: 500px;
+			padding: 0 60px;
+			padding-top: 20px;
+		}
+		.container2 li{
+			line-height: 25px;
+		}
+		li > a {
+			font-size: 13px;
+			color: dodgerblue;
+		}
+	</style>
+</head>
+<body>
+<%- include('partials/header') %>
+
+<div class="container2">
+	<h1>Contact</h1>
+	<ul style="padding-left: 20px;">
+		<li>Telegram : <a href="https://t.me/d4n13lh4k1m" target="_blank">@d4n13lh4k1m</a></li>
+		<li>Whatsapp : <a href="https://wa.me/601158581362" >@hakim</a></li>
+	</ul>
+	<span style="font-size: 8px;opacity: 0.04;">Macam mana gta san andreas cheat boleh dapat nitro? cuba kat sini.</span>
+	<script>
+const konami = [
+  "s","p","e","e","d","f","r","e","a","k"
+];
+
+let input = [];
+document.addEventListener("keydown", (e) => {
+  input.push(e.key);
+
+  if (input.length > konami.length) {
+    input.shift();
+  }
+
+  // Semak sama atau tidak
+  if (JSON.stringify(input) === JSON.stringify(konami)) {
+  	const span = document.createElement("span")
+    alert("Cheat Activated!");
+    span.innerHTML += `
+      <span style="color:red">
+        Jika engkau ingin mencari apa yang tidak kelihatan, lihatlah tempat manusia memperkenalkan dirinya.
+Di sana, sesuatu diselindungkan dengan jubah kabur.
+      </span>
+    `;
+    document.querySelector(".container2 ul").appendChild(span)
+
+    // reset supaya tak aktif lagi
+    input = [];
+  }
+});
+
+	</script>
+</div>
+</body>
+</html>

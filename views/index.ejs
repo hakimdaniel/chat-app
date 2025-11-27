@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>HakimCodez | Home</title>
+	<meta name="description" content="Websocket chat app">
+<%- include('partials/font') %>
+	<link rel="stylesheet" type="text/css" href="assets/style.css">
+</head>
+<body>
+<%- include('partials/header') %>
+<div class="container">
+	<span id="info"><span>Loading...</span></span><br>
+	<div id="chat"></div>
+	<div class="input">
+		<form id="form">
+			<input type="text" autofocus="true" id="text" placeholder="message...">
+			<button id="btn">Send</button>
+		</form>
+	</div>
+</div>
+<script>
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(`${protocol}://${location.host}`); // 1
+const info = document.getElementById("info")
+const text = document.getElementById("text")
+const btn = document.getElementById("btn")
+const form = document.getElementById("form")
+const chat = document.getElementById("chat")
+
+ws.onopen = () => { // 2
+	form.style.display = "block"
+  info.innerHTML = "<span>Connected to Server!</span>"
+};
+
+ws.onmessage = (event) =>{
+	chat.innerHTML += "<br>"+event.data;
+}
+
+ws.onerror = () => {
+  info.innerHTML = "<span style=\"color:red\">Server maybe down! Contact <a href=\"https://t.me/d4n13lh4k1m\">Admin</a></span>";
+};
+
+function send(msg){
+  if(ws.readyState === WebSocket.OPEN){
+    ws.send(msg);
+  } else {
+    alert("Connection refused!");
+  }
+}
+
+
+form.addEventListener("submit",(e)=>{
+	e.preventDefault()
+	if(text.value == ""){
+		alert("Can't empty!")
+		return
+	}
+	send(text.value)
+	text.value = ""
+	chat.scrollTo({
+    top: chat.scrollHeight,
+    behavior: "smooth"
+});
+})
+</script>
+</body>
+</html>
