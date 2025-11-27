@@ -46,8 +46,11 @@ ws.onopen = () => { // 2
 };
 
 ws.onmessage = (event) =>{
-	chat.innerHTML += "<br>"+event.data;
+	const span = document.createElement("span")
+	span.innerHTML += "<br>"+event.data;
+	chat.appendChild(span)
 }
+
 
 ws.onerror = () => {
   info.innerHTML = "<span style=\"color:red\">Server maybe down! Contact <a href=\"https://t.me/d4n13lh4k1m\">Admin</a></span>";
@@ -64,7 +67,7 @@ function send(msg){
 
 form.addEventListener("submit",(e)=>{
 	e.preventDefault()
-	if(text.value == ""){
+	if(text.value.trim() == ""){
 		alert("Can't empty!")
 		return
 	}

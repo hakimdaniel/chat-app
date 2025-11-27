@@ -1,14 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Websocket</title>
-<%- include('partials/font') %>
-	<link rel="stylesheet" type="text/css" href="assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Console</title>
+  <%- include('partials/font') %>
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
+  <style>
+  	body{
+  		padding: 20px;
+  	}
+    .op{
+      color: red;
+      font-weight: bold;
+    }
+    .chat{
+    	margin-top: 20px;
+    }
+    #msg{
+    	color: black;
+    }#send{
+    	color: black;
+    	padding: 2px 12px;
+    	cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-<%- include('partials/header') %>
+  <textarea type="text" id="msg" placeholder="message" rows="6" cols="50" autofocus="true">&lt;span class="animate"&gt;&lt;span class="op"&gt;Server&lt;/span&gt; : &lt;/span&gt;</textarea><br>
+  <button id="send">send</button>
+<div class="chat">
+  
+</div>
+<script>
+const key = "cQEfzvFidNwt2HeJ60Gk<>";
+const form = document.getElementById("form")
+const msg = document.getElementById("msg")
+const btn = document.getElementById("send")
+const ws = new WebSocket(`wss://chat.hakimbox.my/?key=${key}`);
 
+function send(msg){
+  ws.send(key+msg)
+}
+
+ws.onmessage = (event) =>{
+  document.querySelector(".chat").innerHTML += event.data+"<br>"
+}
+btn.addEventListener("click",()=>{
+  send(msg.value.trim())
+})
+</script>
 </body>
 </html>

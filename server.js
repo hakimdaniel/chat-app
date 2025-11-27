@@ -12,19 +12,24 @@ const server = http.createServer(app);
 // Sambungkan WebSocket kepada server yang sama
 const wss = new WebSocket.Server({ server }); // <-- ganti WebSocket.Server({port:8080})
 
-let online = [];
 const KEY = "cQEfzvFidNwt2HeJ60Gk"
+
+const online = new Set()
 
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
-  const clientIP = request.socket.remoteAddress
+  const clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress
   console.log("Connection from "+clientIP);
 
-  if(!online.includes(clientIP)){
-    online.push(clientIP);
+  if(clientIP.includes(",")){
+    clientIP = clientIP.split(',')[0]
   }
 
-  let totalCount = online.length > 1 ? online.length+" users" : online.length+" user";
+  online.add(clientIP)
+
+  let totalCount = online.size === 1 
+    ? "1 user" 
+    : online.size + " users";
 
   socket.send(`<span style="background-color:black;color:white;padding:5px 8px;display:inline-block;transform:translateY(-5px);">Total online : ${totalCount}</span>`);
   socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Welcome to Chat-app!");
@@ -49,9 +54,13 @@ wss.on('connection', (socket,request) => {
   });
 
   wss.on('close', () => {
-        console.log("Client disconnected");
-  });
-
+        online.delete(ip);
+        console.log('Pelawat keluar:', online.size);
+    });
+  wss.on('error', () => {
+        online.delete(ip);
+        console.log('Pelawat disconnect (error):', online.size);
+    });
 });
 
 // EXPRESS SECTION
@@ -73,6 +82,10 @@ app.get('/contact', (req, res) => {
 app.get('/policy', (req, res) => {
   res.render('policy',{path:req.path});
 });
+
+app.get('/console',(req, res)=>{
+  res.render('default')
+})
 
 // 404
 app.use((req, res) => {
