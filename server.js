@@ -14,9 +14,10 @@ const wss = new WebSocket.Server({ server }); // <-- ganti WebSocket.Server({por
 
 let online = [];
 const KEY = "cQEfzvFidNwt2HeJ60Gk"
+
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
-  const clientIP = request.socket.remoteAddress;
+  const clientIP = request.socket.remoteAddress
   console.log("Connection from "+clientIP);
 
   if(!online.includes(clientIP)){
@@ -45,6 +46,10 @@ wss.on('connection', (socket,request) => {
 
       }
     });
+  });
+
+  wss.on('close', () => {
+        console.log("Client disconnected");
   });
 
 });
