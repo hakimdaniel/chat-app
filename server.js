@@ -156,11 +156,11 @@ wss.on('connection', (socket,request) => {
   });
 
   wss.on('close', () => {
-        online.delete(ip);
+        online.delete(clientIp);
         console.log('Pelawat keluar:', online.size);
     });
   wss.on('error', () => {
-        online.delete(ip);
+        online.delete(clientIp)
         console.log('Pelawat disconnect (error):', online.size);
     });
 });
