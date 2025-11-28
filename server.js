@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const express = require('express');
 const path = require("path");
 const http = require("http"); // <-- tambah untuk create server
-
+const online = new Set()
 const app = express();
 const port = 8000;
 
@@ -13,8 +13,95 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server }); // <-- ganti WebSocket.Server({port:8080})
 
 const KEY = "cQEfzvFidNwt2HeJ60Gk"
+const bannedWords = [
+  "ale uto",
+  "anak haram",
+  "anak pungut",
+  "ayuk",
+  "ayut",
+  "babeng",
+  "babi",
+  "bahlul",
+  "balaci",
+  "bangang",
+  "bangsat",
+  "bapak",
+  "bapak kau",
+  "bapok",
+  "batang",
+  "bongok",
+  "burit",
+  "butuh",
+  "celaka",
+  "cucuk",
+  "Dunia Ketiga",
+  "ekor",
+  "hampeh",
+  "hanat",
+  "haram jadah",
+  "harga Yahudi",
+  "jalang",
+  "jolok",
+  "rogol",
+  "jilat",
+  "kamjat",
+  "katak",
+  "kepala butuh",
+  "kepala otak",
+  "kimak",
+  "kiok",
+  "konek",
+  "kongkek",
+  "kote",
+  "kotek",
+  "kunyit",
+  "lahabau",
+  "lahanat",
+  "lancau",
+  "lanjiao",
+  "macai",
+  "mak kau hijau",
+  "mampus",
+  "merecik",
+  "muka awam",
+  "negara haram",
+  "ngok",
+  "palat",
+  "pepek",
+  "politahi",
+  "politaik",
+  "politikus",
+  "puki",
+  "pukimak",
+  "pundek",
+  "rejim Zionis",
+  "Tanjung Rambutan",
+  "terjengkang",
+  "tetek",
+  "tukang",
+  "waknat"
+];
 
-const online = new Set()
+function filter(msg,socket) {
+  let ftext = msg;          // mula-mula ftext sama dengan msg
+  let hasBanned = false;    // flag sama ada ada perkataan larangan
+
+  for (const word of bannedWords) {
+    if (ftext.toLowerCase().includes(word.toLowerCase())) {
+      ftext = ftext.split(word).join("*****"); // ganti perkataan larangan
+      hasBanned = true;
+    }
+  }
+
+  // Hantar mesej amaran jika ada kata larangan
+  if (hasBanned) {
+    return [false, ftext];  // ada kata larangan → kembalikan false + teks baru
+  }
+
+  // tiada kata larangan → kembalikan true + mesej asal
+  return [true, msg];
+}
+
 
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
@@ -31,21 +118,37 @@ wss.on('connection', (socket,request) => {
     ? "1 user" 
     : online.size + " users";
 
-  socket.send(`<span style="background-color:black;color:white;padding:5px 8px;display:inline-block;transform:translateY(-5px);">Total online : ${totalCount}</span>`);
   socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Welcome to Chat-app!");
+  setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
 
   socket.on('message', (msg) => {
-    const message = msg.toString();
+    let message = msg.toString();
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         if(message.split("<>")[0] === KEY){
           client.send(message.split("<>")[1]);
         }
         else if(client === socket){
-          client.send(`<span class="animate"><b>You</b> : ${message}</span>`);
+          if(!filter(message)[0]){
+              message = filter(message)[1]
+              client.send(`<span class="animate"><span class="name">You</span> : ${message}</span>`);
+              setTimeout(() => {
+                socket.send('<span class="animate"><span class="op">Server</span> : Jaga pertuturan, jangan guna kata-kata kesat!</span>');
+              }, 1000);
+          }else{
+              client.send(`<span class="animate"><span class="name">You</span> : ${message}</span>`);
+          }
         } else {
           if (online.includes(clientIP)) {
-            client.send(`<span class="animate"><b>Unknown ${online.indexOf(clientIP)+1}</b> : ${message}</span>`);
+            if(!filter(message)[0]){
+              message = filter(message)[1]
+              client.send(`<span class="animate"><span class="name">Unknown ${online.indexOf(clientIP)+1}</span> : ${message}</span>`);
+              setTimeout(() => {
+                socket.send('<span class="animate"><span class="op">Server</span> : Jaga pertuturan, jangan guna kata-kata kesat!</span>');
+              }, 1000);
+            }else{
+              client.send(`<span class="animate"><span class="name">Unknown ${online.indexOf(clientIP)+1}</span> : ${message}</span>`);
+            }
           }
         }
 
@@ -88,7 +191,7 @@ app.get('/console',(req, res)=>{
 })
 
 // 404
-app.use((req, res) => {
+app.use((req, res, next) => {
   res.status(404).render('404',{path:req.path});
 });
 

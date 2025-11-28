@@ -11,12 +11,17 @@ body{
 .container{
 	padding: 20px;
 }
-b{
+span.name{
 	color:#00FFC4;
+	font-weight: bold;
 }
 .op{
 	color:red;
 	font-weight: bold;
+}
+span:has(.op){
+	color: yellow;
+	background-color:#222;
 }
 #info span{
 	font-family: monospace;
@@ -29,8 +34,11 @@ b{
 	display: none;
 }
 a{
-	font-size: 12px;
+	font-size: 14px;
 	color: blue;
+}
+span.animate a{
+	font-size: 16px;
 }
 .navbar{
 	display: flex;
@@ -110,7 +118,8 @@ a{
 	height: 70vh;
 	border-radius: 12px;
 	padding-bottom: 20px;
-	overflow: auto;
+	overflow-y:auto;
+	overflow-wrap:anywhere;
 }
 .animate{
 	animation: slide .3s ease-out 1 forwards;
@@ -119,17 +128,20 @@ a{
 	padding: 5px;
 	background-color: #706D7A;
 	border-radius: 5px;
-	margin: 2px 0;
-
+	margin: 5px 0;
+	box-shadow: 0 5px 5px rgba(255,255,255,0.1);
 }
 @keyframes slide{
-	from{
+	0%{
 		transform: translateX(-100px) rotate(-10deg);
 		opacity: 0;
-	}to{
+	}100%{
 		transform: translateX(0px) rotate(0deg);
 		opacity: 1;
 	}
+}
+.delay{
+	animation-delay: 2s;
 }
 .navbar .menu .active{
 	background-color: gold;

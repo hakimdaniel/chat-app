@@ -47,8 +47,14 @@ ws.onopen = () => { // 2
 
 ws.onmessage = (event) =>{
 	const span = document.createElement("span")
-	span.innerHTML += "<br>"+event.data;
+	span.style.display = "block"
+	span.style.backgroundColor = "transparent"
+	span.innerHTML = event.data
 	chat.appendChild(span)
+	chat.scrollTo({
+    top: chat.scrollHeight,
+    behavior: "smooth"
+});
 }
 
 
