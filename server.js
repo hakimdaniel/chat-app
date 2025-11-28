@@ -1,4 +1,4 @@
-const WebSocket = require('ws');
+clientIPnstnstnst WebSocket = require('ws');
 const express = require('express');
 const path = require("path");
 const http = require("http"); // <-- tambah untuk create server
@@ -105,7 +105,7 @@ function filter(msg,socket) {
 
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
-  const clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress
+ let clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress
   console.log("Connection from "+clientIP);
 
   if(clientIP.includes(",")){
