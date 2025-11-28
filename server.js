@@ -2,7 +2,6 @@ const WebSocket = require('ws');
 const express = require('express');
 const path = require("path");
 const http = require("http"); // <-- tambah untuk create server
-const online = new Set()
 const app = express();
 const port = 8000;
 
@@ -82,11 +81,15 @@ const bannedWords = [
   "waknat",
   "bodo",
   "bodoh",
-  "sial"
+  "sial",
+  "bangla",
+  "tolol",
+  "buto",
+  "buset"
 ];
 
-function filter(msg,socket) {
-  let ftext = msg;          // mula-mula ftext sama dengan msg
+function filter(msg) {
+  let ftext = msg     // mula-mula ftext sama dengan msg
   let hasBanned = false;    // flag sama ada ada perkataan larangan
 
   for (const word of bannedWords) {
@@ -105,19 +108,17 @@ function filter(msg,socket) {
   return [true, msg];
 }
 
-
+const online = new Set()
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
- let clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress
-  console.log("Connection from "+clientIP);
 
-  online.add(clientIP)
+  online.add(socket)
 
   let totalCount = online.size === 1 
     ? "1 user"
     : online.size + " users";
 
-  socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App! ${totalCount} online`);
+  socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App!`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
 
   socket.on('message', (msg) => {
@@ -156,11 +157,11 @@ wss.on('connection', (socket,request) => {
   });
 
   wss.on('close', () => {
-        online.delete(clientIp);
+        online.delete(socket);
         console.log('Pelawat keluar:', online.size);
     });
   wss.on('error', () => {
-        online.delete(clientIp)
+        online.delete(socket)
         console.log('Pelawat disconnect (error):', online.size);
     });
 });

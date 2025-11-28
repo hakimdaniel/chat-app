@@ -11,11 +11,16 @@
 		.container{
 			max-width:700px;
 			margin: 0 auto;
+			position: relative;
 		}
 		#form{
 			width:100%;
 			justify-content: center;
-			margin-bottom: 20px;
+		}.input{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
 		}
 	</style>
 </head>
@@ -33,19 +38,27 @@
 </div>
 <script>
 const protocol = location.protocol === "https:" ? "wss" : "ws";
-const ws = new WebSocket(`${protocol}://${location.host}`); // 1
+
 const info = document.getElementById("info")
 const text = document.getElementById("text")
 const btn = document.getElementById("btn")
 const form = document.getElementById("form")
 const chat = document.getElementById("chat")
+let ws;
 
-ws.onopen = () => { // 2
+function connect(){
+	if(ws && ws.readyState == WebSocket.OPEN){
+		console.log("already connected")
+		return
+	}
+	ws = new WebSocket(`${protocol}://${location.host}`);
+
+	ws.onopen = () => { // 2
 	form.style.display = "flex"
   info.innerHTML = "<span>Connected to Server!</span>"
-};
+	};
 
-ws.onmessage = (event) =>{
+	ws.onmessage = (event) =>{
 	const span = document.createElement("span")
 	span.style.display = "block"
 	span.style.backgroundColor = "transparent"
@@ -62,6 +75,12 @@ ws.onerror = () => {
   info.innerHTML = "<span style=\"color:red\">Server maybe down! Contact <a href=\"https://t.me/d4n13lh4k1m\">Admin</a></span>";
 };
 
+}
+
+connect()
+
+
+
 function send(msg){
   if(ws.readyState === WebSocket.OPEN){
     ws.send(msg);
@@ -69,7 +88,6 @@ function send(msg){
     alert("Connection refused!");
   }
 }
-
 
 form.addEventListener("submit",(e)=>{
 	e.preventDefault()

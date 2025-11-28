@@ -50,6 +50,7 @@ span.animate a{
 	top: 0;
 	left: 0;
 	right: 0;
+	z-index: 9999;
 	height: 50px;
 }
 .navbar .tm a{
@@ -77,10 +78,6 @@ span.animate a{
 	background-color: lime;
 }
 .input{
-	position: fixed;
-	bottom: 8px;
-	left: 0;
-	right: 0;
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
@@ -116,7 +113,7 @@ span.animate a{
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #151515;
-	height: 70vh;
+	height: 450px;
 	border-radius: 12px;
 	padding-bottom: 20px;
 	overflow-y:auto;
@@ -125,7 +122,6 @@ span.animate a{
 .animate{
 	animation: slide .3s ease-out 1 forwards;
 	display: inline-block;
-	transform-origin: left bottom;
 	padding: 5px;
 	background-color: #706D7A;
 	border-radius: 5px;
@@ -134,10 +130,10 @@ span.animate a{
 }
 @keyframes slide{
 	0%{
-		transform: translateX(-100px) rotate(-10deg);
+		transform: translateX(-100px) scale(0.5);
 		opacity: 0;
 	}100%{
-		transform: translateX(0px) rotate(0deg);
+		transform: translateX(0px) scale(1);
 		opacity: 1;
 	}
 }
