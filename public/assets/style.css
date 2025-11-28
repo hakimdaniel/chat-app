@@ -32,10 +32,6 @@ span:has(.op){
 }
 #form{
 	display: none;
-	position:fixed;
-	bottom:8px;
-	left:0;
-	right:0;
 }
 a{
 	font-size: 14px;
@@ -81,8 +77,8 @@ span.animate a{
 	background-color: lime;
 }
 .input{
-	position: absolute;
-	bottom: 0;
+	position: fixed;
+	bottom: 8px;
 	left: 0;
 	right: 0;
 	display: flex;
