@@ -79,8 +79,13 @@ const bannedWords = [
   "terjengkang",
   "tetek",
   "tukang",
-  "waknat"
+  "waknat",
+  "bodo",
+  "bodoh",
+  "sial"
 ];
+
+const online = new Set()
 
 function filter(msg,socket) {
   let ftext = msg;          // mula-mula ftext sama dengan msg
@@ -108,17 +113,13 @@ wss.on('connection', (socket,request) => {
  let clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress
   console.log("Connection from "+clientIP);
 
-  if(clientIP.includes(",")){
-    clientIP = clientIP.split(',')[0]
-  }
-
   online.add(clientIP)
 
   let totalCount = online.size === 1 
-    ? "1 user" 
+    ? "1 user"
     : online.size + " users";
 
-  socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Welcome to Chat-app!");
+  socket.send(`<span class"animate"><span class="op">Server</span> : Welcome to Chat App! ${totalCount} online`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
 
   socket.on('message', (msg) => {
