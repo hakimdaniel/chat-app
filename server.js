@@ -138,7 +138,7 @@ wss.on('connection', (socket,request) => {
               client.send(`<span class="animate"><span class="name">You</span> : ${message}</span>`);
           }
         } else {
-          if (online.includes(clientIP)) {
+          if (online.has(clientIP)) {
             if(!filter(message)[0]){
               message = filter(message)[1]
               client.send(`<span class="animate"><span class="name">Unknown ${online.indexOf(clientIP)+1}</span> : ${message}</span>`);
