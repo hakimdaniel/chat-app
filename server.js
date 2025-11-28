@@ -1,4 +1,4 @@
-const WebSocket = require('ws');
+animateassassnst WebSocket = require('ws');
 const express = require('express');
 const path = require("path");
 const http = require("http"); // <-- tambah untuk create server
@@ -117,7 +117,7 @@ wss.on('connection', (socket,request) => {
     ? "1 user"
     : online.size + " users";
 
-  socket.send(`<span class"animate"><span class="op">Server</span> : Welcome to Chat App! ${totalCount} online`);
+  socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App! ${totalCount} online`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
 
   socket.on('message', (msg) => {
