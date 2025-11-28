@@ -1,4 +1,4 @@
-clientIPnstnstnst WebSocket = require('ws');
+const WebSocket = require('ws');
 const express = require('express');
 const path = require("path");
 const http = require("http"); // <-- tambah untuk create server
