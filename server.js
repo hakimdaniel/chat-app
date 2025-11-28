@@ -119,9 +119,19 @@ wss.on('connection', (socket,request) => {
   socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App! ${onlineCount === 1 ? "1 user" : onlineCount+" users"} online now!`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
 
-  if(!user.get(ip)){
-    user.set(ip,"User "+index)
-    index++
+  if (!user.has(ip)) {
+    let name;
+
+    while (true) {
+        name = "User " + index;
+        // check jika ada value sama
+        const exists = [...user.values()].includes(name);
+
+        if (!exists) break;   // nama unique dijumpai
+        index++;
+    }
+
+    user.set(ip, name);
   }
 
   console.log(user.get(ip)+" joined the chat!")
