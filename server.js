@@ -124,6 +124,7 @@ wss.on('connection', (socket,request) => {
     index++
   }
 
+  console.log(user.get(ip)+" joined the chat!")
   socket.on('message', (msg) => {
     let message = msg.toString();
     wss.clients.forEach((client) => {
@@ -135,11 +136,14 @@ wss.on('connection', (socket,request) => {
           if(!filter(message)[0]){
               message = filter(message)[1]
               client.send(`<span class="animate"><span class="name">You</span> : ${message}</span>`);
+              console.log(user.get(ip)+" say "+message)
               setTimeout(() => {
                 socket.send('<span class="animate"><span class="op">Server</span> : Jaga pertuturan, jangan guna kata-kata kesat!</span>');
+                console.log("Action taken!")
               }, 1000);
           }else{
               client.send(`<span class="animate"><span class="name">You</span> : ${message}</span>`);
+              console.log(user.get(ip)+" say "+message)
           }
         } else {
             if(!filter(message)[0]){
@@ -158,12 +162,12 @@ wss.on('connection', (socket,request) => {
   });
 
   wss.on('close', () => {
-        online.delete(socket);
-        console.log('Pelawat keluar:', online.size);
+        console.log(user.get(ip)+" closed connection!")
+        user.delete(ip);
     });
   wss.on('error', () => {
-        online.delete(socket)
-        console.log('Pelawat disconnect (error):', online.size);
+        console.log(user.get(ip)+" connection closed!")
+        user.delete(ip)
     });
 });
 

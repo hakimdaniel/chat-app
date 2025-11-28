@@ -16,7 +16,8 @@
 		#form{
 			width:100%;
 			justify-content: center;
-		}.input{
+		}
+		.input{
 			position: fixed;
 			bottom: 0;
 			left: 0;
@@ -88,6 +89,7 @@ function send(msg){
     alert("Connection refused!");
   }
 }
+let timeout = true;
 
 form.addEventListener("submit",(e)=>{
 	e.preventDefault()
@@ -95,12 +97,21 @@ form.addEventListener("submit",(e)=>{
 		alert("Can't empty!")
 		return
 	}
-	send(text.value)
-	text.value = ""
-	chat.scrollTo({
-    top: chat.scrollHeight,
-    behavior: "smooth"
-});
+	if(timeout){
+		send(text.value)
+		text.value = ""
+		chat.scrollTo({
+	    top: chat.scrollHeight,
+	    behavior: "smooth"
+		});
+		timeout = false
+		setTimeout(()=>{
+			timeout = true
+		},3000)
+	}else{
+		alert("Wait 3 second before send message again!")
+	}
+	
 })
 </script>
 </body>
