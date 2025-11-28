@@ -108,15 +108,8 @@ function filter(msg) {
   return [true, msg];
 }
 
-const online = new Set()
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
-
-  online.add(socket)
-
-  let totalCount = online.size === 1 
-    ? "1 user"
-    : online.size + " users";
 
   socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App!`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
