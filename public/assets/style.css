@@ -32,6 +32,10 @@ span:has(.op){
 }
 #form{
 	display: none;
+	position:fixed;
+	bottom:8px;
+	left:0;
+	right:0;
 }
 a{
 	font-size: 14px;
@@ -93,6 +97,7 @@ span.animate a{
 	border: none;
 	margin: 0;
 }
+
 #form #btn{
 	color: black;
 	padding: 10px;
