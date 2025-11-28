@@ -85,8 +85,6 @@ const bannedWords = [
   "sial"
 ];
 
-const online = new Set()
-
 function filter(msg,socket) {
   let ftext = msg;          // mula-mula ftext sama dengan msg
   let hasBanned = false;    // flag sama ada ada perkataan larangan
