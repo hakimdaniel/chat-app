@@ -108,11 +108,21 @@ function filter(msg) {
   return [true, msg];
 }
 
+const user = new Map()
+let index = 1
+
 // WEBSOCKET SECTION
 wss.on('connection', (socket,request) => {
+  const ip = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
 
-  socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App!`);
+  const onlineCount = [...wss.clients].filter(c => c.readyState === WebSocket.OPEN).length;
+  socket.send(`<span class="animate"><span class="op">Server</span> : Welcome to Chat App! ${onlineCount === 1 ? "1 user" : onlineCount+" users"} online now!`);
   setTimeout(()=>socket.send("<span class=\"animate\"><span class=\"op\">Server</span> : Read <a href=\"/policy\">Policy</a> before chatting.!"),1000)
+
+  if(!user.get(ip)){
+    user.set(ip,"User "+index)
+    index++
+  }
 
   socket.on('message', (msg) => {
     let message = msg.toString();
@@ -134,12 +144,12 @@ wss.on('connection', (socket,request) => {
         } else {
             if(!filter(message)[0]){
               message = filter(message)[1]
-              client.send(`<span class="animate"><span class="name">Unknown ${online.indexOf(clientIP)+1}</span> : ${message}</span>`);
+              client.send(`<span class="animate"><span class="name">${user.get(ip)}</span> : ${message}</span>`);
               setTimeout(() => {
                 socket.send('<span class="animate"><span class="op">Server</span> : Jaga pertuturan, jangan guna kata-kata kesat!</span>');
               }, 1000);
             }else{
-              client.send(`<span class="animate"><span class="name">Unknown ${online.indexOf(clientIP)+1}</span> : ${message}</span>`);
+              client.send(`<span class="animate"><span class="name">${user.get(ip)}</span> : ${message}</span>`);
             }
         }
 
